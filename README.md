@@ -9,3 +9,5 @@
 
 
 useage: start|stop|restart [delay in mintues]
+
+建议将本软件加入开机自启动以免忘记使用
