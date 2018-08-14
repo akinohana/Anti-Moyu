@@ -1,10 +1,22 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+import sys
 import win32gui
 import time
 import winsound
 import win32api
+import os
+
+
+def markrunningpid(pid):
+	fn = str(pid)+ ".running";
+	try:
+		file = open(fn, 'r')
+	except IOError:
+		file = open(fn, 'w')
+
+markrunningpid(os.getpid());
 
 def send_email(user, pwd, recipient, subject, body):
 	import smtplib
@@ -28,19 +40,36 @@ def send_email(user, pwd, recipient, subject, body):
 	time.sleep(10);
 
 
+
+
 def remindtocode():
 	print 'Do work now!!!!'
-	send_email('xxxxxxxx@gmail.com','xxxxxxxxxxxx','xxxxxxxxxxxxx@gmail.com','起床写代码啦！！','~~~~');
+#	send_email('xxxxxxxxxxxxx@gmail.com','xxxxxxxxxxxxxxxxxx','xxxxxxxxxxxxxxx@gmail.com','起床写代码啦！！','~~~~');
+
 
 notdoingwork = 0;
 nottouchingPC = 0;
 needremind = False;
 lastinputtime =0;
 
-AllowedWndTitle = ['Studio', 'Google 搜索','EditPlus','Gmail','XShell','Xftp','WebStorm']
+AllowedWndTitle = ['Studio', 'Google 搜索','EditPlus','Gmail','XShell','Xftp','WebStorm','Webix','CMD','VMWare']
+
+def checkifNeedStop():
+	if(os.path.isfile('stop')):
+		print 'Starting to MoYu';
+		os.remove("stop")
+		exit();
+
+for i in range(0,int(sys.argv[1])):
+
+	time.sleep(1);
+	print "Waiting...."
+	checkifNeedStop();
+
 
 while(1):
-	
+	checkifNeedStop();
+
 	if(lastinputtime == win32api.GetLastInputInfo()):
 		print 'Get back to PC!!!'		
 		nottouchingPC += 1;
@@ -67,7 +96,7 @@ while(1):
 	if (isfindallowedtitle == False):
 		print 'Do work!!!!'
 		notdoingwork += 1;
-		if(notdoingwork > 300):
+		if(notdoingwork > 30):
 			needremind = True;
 	else:
 		notdoingwork = 0;
